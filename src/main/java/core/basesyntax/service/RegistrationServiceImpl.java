@@ -9,6 +9,9 @@ import core.basesyntax.expection.InvalidDataException;
 import core.basesyntax.model.User;
 
 public class RegistrationServiceImpl implements RegistrationService {
+    private static final int MIN_AGE = 18;
+    private static final int MIN_PASSWORD_LENGTH = 6;
+    private static final int MIN_LOGIN_LENGTH = 6;
     private final StorageDao storageDao = new StorageDaoImpl();
 
     @Override
@@ -19,10 +22,11 @@ public class RegistrationServiceImpl implements RegistrationService {
         }
 
         if (user.getLogin() == null
-                || user.getLogin().length() < 6
+                || user.getLogin().length() < MIN_LOGIN_LENGTH
                 || user.getPassword() == null
-                || user.getPassword().length() < 6
-                || user.getAge() < 18) {
+                || user.getPassword().length() < MIN_PASSWORD_LENGTH
+                || user.getAge() == 0
+                || user.getAge() < MIN_AGE) {
             throw new InvalidDataException("Invalid data typed");
         }
 

@@ -2,7 +2,7 @@ package core.basesyntax.service;
 
 import static core.basesyntax.db.Storage.people;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import core.basesyntax.expection.AlreadyExistException;
 import core.basesyntax.expection.InvalidDataException;
@@ -25,65 +25,71 @@ class RegistrationServiceImplTest {
     }
 
     @Test
-    void userExist_NoOk() {
+    void register_userExists_notOk() {
         registrationService.register(user);
-        try {
+        assertThrows(AlreadyExistException.class, () -> {
             registrationService.register(user);
-        } catch (AlreadyExistException e) {
-            return;
-        }
-        fail("AlreadyExistException should be thrown if user exists");
+        });
     }
 
     @Test
-    void userNotAddedBecauseOfAge_NoOk() {
+    void register_userNotAddedBecauseOfAge_NoOk() {
         user.setAge(10);
-        try {
+        assertThrows(InvalidDataException.class, () -> {
             registrationService.register(user);
-        } catch (InvalidDataException e) {
-            return;
-        }
-        fail("InvalidDataException should be thrown if user data wrong is");
+        });
     }
 
     @Test
-    void userNotAddedBecauseOfLogin_NoOk() {
+    void register_userNotAddedBecauseOfLogin_NoOk() {
         user.setLogin("ew");
-        try {
+        assertThrows(InvalidDataException.class, () -> {
             registrationService.register(user);
-        } catch (InvalidDataException e) {
-            return;
-        }
-        fail("InvalidDataException should be thrown if user data wrong is");
+        });
     }
 
     @Test
-    void userNotAddedBecauseOfPassword_NoOk() {
+    void register_userNotAddedBecauseOfPassword_NoOk() {
         user.setPassword("2941");
-        try {
+        assertThrows(InvalidDataException.class, () -> {
             registrationService.register(user);
-        } catch (InvalidDataException e) {
-            return;
-        }
-        fail("InvalidDataException should be thrown if user data wrong is");
+        });
     }
 
     @Test
-    void userAdded_Ok() {
+    void register_userAdded_Ok() {
         User result = registrationService.register(user);
         assertNotNull(result);
     }
 
     @Test
-    void userDataIsNull_NoOk() {
-        user = null;
+    void register_userDataIsNull_NoOk() {
+        assertThrows(InvalidDataException.class, () -> {
+            registrationService.register(null);
+        });
+    }
 
-        try {
+    @Test
+    void register_userAgeIsZero_NoOk() {
+        user.setAge(0);
+        assertThrows(InvalidDataException.class, () -> {
             registrationService.register(user);
-        } catch (InvalidDataException e) {
-            return;
-        }
+        });
+    }
 
-        fail("InvalidDataException should be thrown");
+    @Test
+    void register_userPasswordIsNull_NoOk() {
+        user.setPassword(null);
+        assertThrows(InvalidDataException.class, () -> {
+            registrationService.register(user);
+        });
+    }
+
+    @Test
+    void register_userLoginIsNull_NoOk() {
+        user.setLogin(null);
+        assertThrows(InvalidDataException.class, () -> {
+            registrationService.register(user);
+        });
     }
 }
