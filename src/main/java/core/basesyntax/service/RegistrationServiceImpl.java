@@ -21,12 +21,27 @@ public class RegistrationServiceImpl implements RegistrationService {
             throw new InvalidDataException("User cannot be null");
         }
 
-        if (user.getLogin() == null
-                || user.getLogin().length() < MIN_LOGIN_LENGTH
-                || user.getPassword() == null
-                || user.getPassword().length() < MIN_PASSWORD_LENGTH
-                || user.getAge() == 0
-                || user.getAge() < MIN_AGE) {
+        if (user.getLogin() == null) {
+            throw new InvalidDataException("Invalid data typed");
+        }
+
+        if (user.getLogin().length() < MIN_LOGIN_LENGTH) {
+            throw new InvalidDataException("Invalid data typed");
+        }
+
+        if (user.getPassword() == null) {
+            throw new InvalidDataException("Invalid data typed");
+        }
+
+        if (user.getPassword().length() < MIN_PASSWORD_LENGTH) {
+            throw new InvalidDataException("Invalid data typed");
+        }
+
+        if (user.getAge() == 0) {
+            throw new InvalidDataException("Invalid data typed");
+        }
+
+        if (user.getAge() < MIN_AGE) {
             throw new InvalidDataException("Invalid data typed");
         }
 

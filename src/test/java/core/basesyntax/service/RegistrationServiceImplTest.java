@@ -1,8 +1,10 @@
 package core.basesyntax.service;
 
 import static core.basesyntax.db.Storage.people;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import core.basesyntax.expection.AlreadyExistException;
 import core.basesyntax.expection.InvalidDataException;
@@ -91,5 +93,49 @@ class RegistrationServiceImplTest {
         assertThrows(InvalidDataException.class, () -> {
             registrationService.register(user);
         });
+    }
+
+    @Test
+    void register_userLoginLengthIsFive_NoOk() {
+        user.setLogin("rwqer");
+        assertThrows(InvalidDataException.class, () -> {
+            registrationService.register(user);
+        });
+    }
+
+    @Test
+    void register_userAgeIsSeventeen_NoOk() {
+        user.setAge(17);
+        assertThrows(InvalidDataException.class, () -> {
+            registrationService.register(user);
+        });
+    }
+
+    @Test
+    void register_userPasswordIsEmpty_NoOk() {
+        user.setPassword("");
+        assertThrows(InvalidDataException.class, () -> {
+            registrationService.register(user);
+        });
+    }
+
+    @Test
+    void register_userLoginIsEmpty_NoOk() {
+        user.setLogin("");
+        assertThrows(InvalidDataException.class, () -> {
+            registrationService.register(user);
+        });
+    }
+
+    @Test
+    void register_userCreated_Ok() {
+        User result = registrationService.register(user);
+        assertEquals(user, result);
+    }
+
+    @Test
+    void register_userContains_Ok() {
+        User result = registrationService.register(user);
+        assertTrue(people.contains(result));
     }
 }
